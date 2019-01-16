@@ -46,7 +46,7 @@ objects:
       contextDir: openshift
       git:
         ref: ${GIT_REF}
-        uri: ${GIT_REPO}
+        uri: ${GIT_REMOTE}
       type: Git
     strategy:
       dockerStrategy:
