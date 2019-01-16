@@ -31,6 +31,16 @@ Import fixtures (if desired):
     
     oc rsh dc/netbox netbox/manage.py loaddata initial_data
     
+Create superuser:
+
+    oc rsh dc/netbox netbox/manage.py shell
+    
+    >>> from django.contrib.auth.models import User
+    >>> u = User.objects.get(id=1)
+    >>> u.is_staff = True
+    >>> u.is_superuser = True
+    >>> u.save()
+    
 Refer to the installation instructions for further steps:
 
     https://netbox.readthedocs.io/en/stable/installation/2-netbox/
