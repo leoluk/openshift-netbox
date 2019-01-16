@@ -1,0 +1,61 @@
+---
+
+apiVersion: v1
+kind: Template
+labels:
+  app: netbox
+  template: netbox
+metadata:
+  name: netbox
+  template.openshift.io/bindable: "false"
+
+parameters:
+- displayName: Name
+  name: NAME
+  required: true
+  value: netbox-base
+- displayName: Git Remote
+  name: GIT_REMOTE
+  required: true
+  value: https://github.com/leoluk/openshift-netbox
+- displayName: Git Reference
+  name: GIT_REF
+  required: true
+  value: master
+
+objects:
+
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    name: ${NAME}
+
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    labels:
+      build: ${NAME}
+    name: ${NAME}
+  spec:
+    output:
+      to:
+        kind: ImageStreamTag
+        name: ${NAME}:latest
+    runPolicy: Serial
+    source:
+      contextDir: openshift
+      git:
+        ref: ${GIT_REF}
+        uri: ${GIT_REPO}
+      type: Git
+    strategy:
+      dockerStrategy:
+        from:
+          kind: ImageStreamTag
+          name: python:3.6
+          namespace: openshift
+      type: Docker
+    triggers:
+    - imageChange: {}
+      type: ImageChange
+    - type: ConfigChange
