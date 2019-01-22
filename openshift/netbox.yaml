@@ -69,6 +69,17 @@ objects:
 #------------------------------------------------- Django
 
 - apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    name: ${NAME}-media
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi
+
+- apiVersion: v1
   kind: ConfigMap
   metadata:
     name: ${NAME}-config
@@ -81,6 +92,8 @@ objects:
       ALLOWED_HOSTS = ['${FQDN}']
 
       SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
+
+      MEDIA_ROOT = '/opt/app-root/media'
 
       DATABASE = {
           'NAME': os.getenv('DATABASE_NAME'),
@@ -186,11 +199,16 @@ objects:
           - name: config
             mountPath: /opt/app-root/src/netbox/netbox/configuration.py
             subPath: settings.py
+          - name: media
+            mountPath: /opt/app-root/media
         restartPolicy: Always
         volumes:
         - name: config
           configMap:
             name: ${NAME}-config
+        - name: media
+          persistentVolumeClaim:
+            claimName: ${NAME}-media
     test: false
     triggers:
     - imageChangeParams:
