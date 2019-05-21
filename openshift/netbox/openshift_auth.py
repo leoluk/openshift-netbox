@@ -5,6 +5,11 @@ Custom OpenShift OAuth2 provider
 # TODO: upstream to social-core
 
 import requests
+
+from django.views.generic import View
+from django.http import HttpResponseRedirect
+from django.contrib.auth import logout as auth_logout
+
 from social_core.backends.oauth import BaseOAuth2
 
 
@@ -56,3 +61,17 @@ class OpenshiftOAuth2(BaseOAuth2):
             K8S_API + "/oapi/v1/users/~",
             verify=K8S_CA_FILE,
             headers=headers).json()
+
+# Customized LogoutView that redirects to the OpenShift Console logout URI
+class LogoutView(View):
+    def get(self, request):
+        # Log out the user
+        auth_logout(request)
+
+        # Log out from OpenShift Console
+        response = HttpResponseRedirect(OpenshiftOAuth2.k8s_oauth['issuer'] + '/console/logout')
+
+        # Delete session key cookie (if set) upon logout
+        response.delete_cookie('session_key')
+
+        return response
