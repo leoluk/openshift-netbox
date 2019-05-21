@@ -21,7 +21,7 @@ parameters:
 - displayName: Git Reference
   name: GIT_REF
   required: true
-  value: master
+  value: openshift_login
 
 objects:
 

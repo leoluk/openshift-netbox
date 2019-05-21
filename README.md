@@ -31,7 +31,7 @@ Import fixtures (if desired):
     
     oc rsh dc/netbox netbox/manage.py loaddata initial_data
     
-Create superuser:
+Give superuser permissions to a user:
 
     oc rsh dc/netbox netbox/manage.py shell
     

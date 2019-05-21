@@ -21,11 +21,10 @@ parameters:
 - displayName: Git Reference
   name: GIT_REF
   required: true
-  value: v2.5.3
+  value: v2.5.12
 - displayName: Public FQDN
   name: FQDN
   required: true
-  value: netbox.example.com
 - description: Set this to a long random string.
   displayName: Django Secret Key
   from: '[\w]{50}'
@@ -171,6 +170,8 @@ objects:
             value: ${NAME}-db
           - name: DATABASE_SERVICE_PORT
             value: "5432"
+          - name: NETBOX_DEBUG
+            value: "False"
           - name: DJANGO_SECRET_KEY
             valueFrom:
               secretKeyRef:
@@ -209,6 +210,7 @@ objects:
         - name: media
           persistentVolumeClaim:
             claimName: ${NAME}-media
+        serviceAccountName: ${NAME}
     test: false
     triggers:
     - imageChangeParams:
@@ -250,6 +252,14 @@ objects:
     selector:
       deploymentconfig: ${NAME}
     type: ClusterIP
+
+- apiVersion: v1
+  kind: ServiceAccount
+  metadata:
+    annotations:
+      serviceaccounts.openshift.io/oauth-redirectreference.first: >
+        {"kind": "OAuthRedirectReference", "apiVersion": "v1", "reference": {"kind": "Route", "name": "${NAME}"}}
+    name: ${NAME}
 
 #------------------------------------------------- Database
 
