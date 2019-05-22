@@ -12,7 +12,7 @@ Create application:
 
 Tear down:
 
-    oc delete all,secret,pvc,configmap -l app=netbox
+    oc delete all,secret,pvc,configmap,serviceaccount -l app=netbox
 
 Rebuild:
 
