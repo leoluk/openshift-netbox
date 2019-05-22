@@ -28,7 +28,6 @@ class OpenshiftOAuth2(BaseOAuth2):
         return K8S_API + "/oauth/token"
 
     def authorization_url(self):
-        print("blub:", self.k8s_oauth['authorization_endpoint'])
         return self.k8s_oauth['authorization_endpoint']
 
     def get_user_id(self, details, response):
