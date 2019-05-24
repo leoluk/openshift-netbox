@@ -40,6 +40,14 @@ Give superuser permissions to a user:
     >>> u.is_staff = True
     >>> u.is_superuser = True
     >>> u.save()
+
+Database backup/restore:
+
+    oc rsh --no-tty dc/netbox-db bash -c 'pg_dump --username=$POSTGRESQL_USER --format=custom $POSTGRESQL_DATABASE' > dumpfile
+    oc rsh --no-tty dc/netbox-db bash -c 'pg_restore --username=$POSTGRESQL_USER --clean --dbname=$POSTGRESQL_DATABASE' < dumpfile
+
+(Expect the error messages `must be owner of extension plpgsql` and `must be
+owner of schema public` from `pg_restore`. These can be ignored.)
     
 Refer to the installation instructions for further steps:
 
