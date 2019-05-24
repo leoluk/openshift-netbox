@@ -1,5 +1,9 @@
 # openshift-netbox
 
+**NOTE:** Multiple companies are using this in production, but the interfaces are
+not stable yet. Take a look at changes and reconcile them with your production
+setup before updating the base image or reapplying the k8s config!
+
 OpenShift/okd.io[1] deployment for Netbox.
 
 Requires a cluster with persistent storage. Make sure that the `oc` client is 
