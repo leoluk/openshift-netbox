@@ -52,7 +52,12 @@ Database backup/restore:
 
 (Expect the error messages `must be owner of extension plpgsql` and `must be
 owner of schema public` from `pg_restore`. These can be ignored.)
-    
+
+Media backup/restore:
+
+    oc rsync $(oc get pods -l app=netbox -o name):/opt/app-root/media/ backup-directory/
+    oc rsync backup-directory/ $(oc get pods -l app=netbox -o name):/opt/app-root/media/
+
 Refer to the installation instructions for further steps:
 
     https://netbox.readthedocs.io/en/stable/installation/2-netbox/
