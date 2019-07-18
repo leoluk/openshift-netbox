@@ -21,7 +21,7 @@ parameters:
 - displayName: Git Reference
   name: GIT_REF
   required: true
-  value: v2.5.12
+  value: v2.5.13
 - displayName: Public FQDN
   name: FQDN
   required: true
